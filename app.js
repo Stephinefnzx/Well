@@ -144,6 +144,8 @@ app.post('/receive', async (req, res) => {
   let message = '';
   const myObject = req.body;
 
+  console.log(myObject);
+
   try {
     const ipAddress = getClientIp(req);
     const geoInfo = await sendAPIRequest(ipAddress);
