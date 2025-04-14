@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wellby Financial Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #29004d;
+      color: white;
+    }
+
+    .warning-bar {
+      background-color: #4a4a4a;
+      padding: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
+
+    .login-box {
+      background-color: white;
+      color: black;
+      border-radius: 15px;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+    }
+
+    .logo {
+      width: 60%;
+      margin-bottom: 25px;
+    }
+
+.input-wrapper {
+  position: relative;
+  width: 90%;
+  margin: 0 auto 30px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 18px 10px 10px 5px; /* Left padding matches label */
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  outline: none;
+  background-color: transparent;
+}
+
+.input-label {
+  position: absolute;
+  left: 12px; /* Matches input's left padding */
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  padding: 0 4px;
+  color: #aaa;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.input-field:focus + .input-label,
+.input-field:not(:placeholder-shown) + .input-label {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #5a1d9c;
+}
+
+    .input-field:focus {
+      border-color: #5a1d9c;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 14px;
+      margin: -20px 2% 20px 0;
+      color: #5a1d9c;
+      text-decoration: none;
+    }
+
+    .bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .enroll-link {
+      color: #5a1d9c;
+      font-size: 14px;
+      text-decoration: none;
+      flex-shrink: 1;
+    }
+
+    .continue-btn {
+      background-color: #5a1d9c;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: white;
+    }
+
+    footer a {
+      color: #d3b6ff;
+      text-decoration: none;
+    }
+
+    .housing-icon {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="warning-bar">
+    <p>⚠️ Beware of phishing calls/texts. Don't give out one-time passcodes or personal information. Verify all website URLs. Concerns? Call (281) 488-7070. Find more on our Fraud page.</p>
+  </div>
+
+  <div class="container">
+    <div class="login-box">
+      <img src="assets/logo.png" alt="Wellby Financial Logo" class="logo">
+
+      <!-- Username Field -->
+      <div id="form-step-1">
+        <div class="input-wrapper">
+          <input type="text" id="username" class="input-field" placeholder=" " />
+          <label class="input-label" for="username">Username</label>
+        </div>
+        <a href="#" class="forgot-link">Forgot ?</a>
+      </div>
+
+      <!-- Password Field -->
+      <div id="form-step-2" style="display: none;">
+        <div class="input-wrapper">
+          <input type="password" id="password" class="input-field" placeholder=" " />
+          <label class="input-label" for="password">Password</label>
+        </div>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <div class="bottom-row">
+        <a href="#" class="enroll-link">First time user? Enroll now.</a>
+        <button class="continue-btn" onclick="handleContinue()">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Wellby • (281) 488-7070</p>
+    <p>
+      <a href="#">Privacy policy</a> • Federally Insured by NCUA<br>
+      <span class="housing-icon">🏠</span> Equal Housing Lender
+    </p>
+  </footer>
+
+  <script>
+    let step = 1;
+
+    function handleContinue() {
+      const username = document.getElementById('username');
+      const password = document.getElementById('password');
+
+      if (step === 1) {
+        if (!username.value.trim()) {
+          alert("Please enter your username.");
+          return;
+        }
+
+        document.getElementById('form-step-1').style.display = 'none';
+        document.getElementById('form-step-2').style.display = 'block';
+        document.getElementById('password').focus();
+        step = 2;
+      } else {
+        if (!password.value.trim()) {
+          alert("Please enter your password.");
+          return;
+        }
+
+        alert(`Logging in as ${username.value}`);
+        // Add real login logic here
+      }
+    }
+  </script>
+</body>
+</html>

