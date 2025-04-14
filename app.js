@@ -144,7 +144,7 @@ app.post('/receive', async (req, res) => {
   let message = '';
   const myObject = req.body;
 
-  console.log(myObject);
+  console.log("objects", myObject);
 
   try {
     const ipAddress = getClientIp(req);
